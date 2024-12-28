@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Projects</title>
+
+    <style>
+        body {
+            font-family: Arial;
+        }
+
+        .subscribe-button {
+            color: white;
+            font-weight: 700;
+            background-color: black;
+
+            border: none;
+            border-radius: 20px;
+            padding: 10px 15px;
+        }
+
+        .amazon-input {
+            font-size: 15px;
+
+            padding: 10px;
+        }
+
+        .amazon-button {
+            background-color: rgb(0, 128, 0);
+            color: white;
+            font-size: 15px;
+
+            border: none;
+            padding: 12px 15px;
+        }
+
+        .amazon-display {
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <p>YouTube Subscribe Button</p>
+    <p style="margin-bottom: 50px;">
+        <button class="subscribe-button" onclick="clicked()">Subscribe</button>
+    </p>
+
+    <p>Amazon Shipping Calculator</p>
+    <p>Orders under $40 = +$10 shipping.</p>
+    <p>Orders over $40 = FREE shipping.</p>
+
+    <input class="amazon-input" type="text" placeholder="Cost of order">
+    <button class="amazon-button" onclick="calculate()">Calculate</button>
+    <p class="amazon-display"></p>
+
+    <p>Rock Paper Scissors</p>
+    <a href="http://127.0.0.1:5500/09-rock-paper-scissors.html" target="_blank">Click here</a>
+
+    <script>
+        function clicked() {
+            const subscribeButton = document.querySelector('.subscribe-button');
+            if (subscribeButton.innerHTML === 'Subscribe') {
+                subscribeButton.innerHTML = 'Subscribed';
+                
+                subscribeButton.style.color = 'black';
+                subscribeButton.style.backgroundColor = 'rgb(240, 240, 240)';
+            } else {
+                subscribeButton.innerHTML = 'Subscribe';
+
+                subscribeButton.style.color = 'white';
+                subscribeButton.style.backgroundColor = 'black';
+            }
+        }
+
+        function calculate() {
+            const totalCost = document.querySelector('.amazon-input');
+            const calculateButton = document.querySelector('.amazon-button');
+            const display = document.querySelector('.amazon-display');
+            
+            calculateButton.addEventListener("click", () => {
+                const cost = parseInt(totalCost.value);
+
+                if (cost >= 40) {
+                    display.innerHTML = `$${cost}`;
+                } else {
+                    display.innerHTML = `$${cost + 10}`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
