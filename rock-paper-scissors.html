@@ -1,117 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Paper Scissors</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors</title>
 
-    <style>
-        body {
-            background-color: rgb(25, 25, 25);    
-            color: white;
-            font-family: Arial;
-        }
+  <style>
+    body {
+      background-color: rgb(25, 25, 25);
+      color: white;
+      font-family: Arial;
+    }
 
-        .title {
-            font-size: 30px;
-            font-weight: 700;
-        }
+    .title {
+      font-size: 30px;
+      font-weight: 700;
+    }
 
-        .choice-container {
-            background-color: rgb(25, 25, 25);
-            border: none;
+    .choice-container {
+      background-color: rgb(25, 25, 25);
+      border: none;
 
-            margin-bottom: 40px;
-        }
+      margin-bottom: 40px;
+    }
 
-        .choice {
-            height: 50px;
-            border: 3px solid white;
-            border-radius: 100px;
-            padding: 33px;
-            background-color: rgb(25, 25, 25);
-        }
+    .choice {
+      height: 50px;
+      border: 3px solid white;
+      border-radius: 100px;
+      padding: 33px;
+      background-color: rgb(25, 25, 25);
+    }
 
-        #reset-button {
-            padding: 8px 15px;
-            background-color: white;
-            border: none;
-            font-size: 15px;
-        }
-    </style>
+    #reset-button,
+    #auto-play-button,
+    #stop-play-button {
+      padding: 8px 15px;
+      background-color: white;
+      border: none;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .result {
+      font-weight: bold;
+      font-size: 30px;
+    }
+
+    .choice-result {
+      height: 50px;
+      padding: 5px;
+      background-color: rgb(25, 25, 25);
+    }
+  </style>
 </head>
+
 <body>
-    <p class="title">Rock Paper Scissors</p>
-    <p>
-        <button class="choice-container" onclick="game('rock')">
-            <img class="choice" src="icons/rock-emoji.png">
-        </button>
-        <button class="choice-container" onclick="game('paper')">
-            <img class="choice" src="icons/paper-emoji.png">
-        </button>
-        <button class="choice-container" onclick="game('scissors')">
-            <img class="choice" src="icons/scissors-emoji.png">
-        </button>
-        <p id="result"></p>
-        <p id="display"></p>
-        <button id="reset-button" onclick="resetScore()">Reset Score</button>
-    </p>
+  <p class="title">Rock Paper Scissors</p>
+  <p>
+    <button class="choice-container" onclick="game('rock')">
+      <img class="choice" src="../icons/rock-emoji.png">
+    </button>
+    <button class="choice-container" onclick="game('paper')">
+      <img class="choice" src="../icons/paper-emoji.png">
+    </button>
+    <button class="choice-container" onclick="game('scissors')">
+      <img class="choice" src="../icons/scissors-emoji.png">
+    </button>
+  <div id="result"></div>
+  <p id="display"></p>
+  <button id="reset-button" onclick="resetScore()">Reset Score</button>
+  <button id="auto-play-button" onclick="autoPlay()">Auto Play</button>
+  </p>
 
-    <script>
-        function computerChoiceAnalyzer() {
-            const number = Math.random();
-            let choice = '';
-            if (number < 1/3) { choice = 'rock'; }
-            else if (number < 2/3) { choice = 'paper'; }
-            else { choice = 'scissors'; }
+  <script>
+    function computerChoiceAnalyzer() {
+      const number = Math.random();
+      let choice = '';
+      if (number < 1 / 3) { choice = 'rock'; }
+      else if (number < 2 / 3) { choice = 'paper'; }
+      else { choice = 'scissors'; }
 
-            return choice;
-        }
+      return choice;
+    }
 
-        function game(playerChoice) {
-            const computerChoice = computerChoiceAnalyzer();
-            let result = '';
-            if (playerChoice === computerChoice) {
-                result = 'Tie.';
-                score.ties++;
-            } else if ((playerChoice === 'rock' && computerChoice === 'scissors') 
-            || (playerChoice === 'paper' && computerChoice === 'rock')
-            || (playerChoice === 'scissors' && computerChoice === 'paper')) {
-                result = 'You win.';
-                score.wins++;
-            } else {
-                result = 'You lose.';
-                score.losses++;
-            }
+    function game(playerChoice) {
+      const computerChoice = computerChoiceAnalyzer();
+      let result = '';
+      if (playerChoice === computerChoice) {
+        result = 'Tie.';
+        score.ties++;
+      } else if ((playerChoice === 'rock' && computerChoice === 'scissors')
+        || (playerChoice === 'paper' && computerChoice === 'rock')
+        || (playerChoice === 'scissors' && computerChoice === 'paper')) {
+        result = 'You win.';
+        score.wins++;
+      } else {
+        result = 'You lose.';
+        score.losses++;
+      }
 
-            localStorage.setItem('score', JSON.stringify(score));
+      localStorage.setItem('score', JSON.stringify(score));
 
-            const display = `<p>${result}</p>
-            <p>You ${playerChoice} - ${computerChoice} computer</p>`;
-            document.getElementById('result').innerHTML = display;
-            document.getElementById('display').innerHTML = displayScore();
-        }
+      const display = `
+        <p class="result">${result}</p>
+        <div style="margin-bottom: 60px;"> 
+          You ${choiceToImage(playerChoice)} ${choiceToImage(computerChoice)} computer
+        </div>`;
+      document.getElementById('result').innerHTML = display;
+      document.getElementById('display').innerHTML = displayScore();
+    }
 
-        function displayScore() {
-            return `Wins: ${score.wins}. Losses: ${score.losses}. Ties: ${score.ties}`; 
-        }
+    function displayScore() {
+      return `Wins: ${score.wins}. Losses: ${score.losses}. Ties: ${score.ties}`;
+    }
 
-        function resetScore() {
-            score.wins = 0;
-            score.losses = 0;
-            score.ties = 0;
-            localStorage.removeItem('score');
-            document.getElementById('display').innerHTML = displayScore();
-        }
+    function resetScore() {
+      score.wins = 0;
+      score.losses = 0;
+      score.ties = 0;
+      localStorage.removeItem('score');
+      document.getElementById('display').innerHTML = displayScore();
+    }
 
-        let score = JSON.parse(localStorage.getItem('score')) 
-        || {
-            wins: 0,
-            losses: 0,
-            ties: 0 
-        };
+    function choiceToImage(choice) {
+      let htmlDisplay = '';
+      if (choice === 'rock') {
+        htmlDisplay = `<img class="choice-result" src="../icons/rock-emoji.png">`;
+      }
+      else if (choice === 'paper') {
+        htmlDisplay = `<img class="choice-result" src="../icons/paper-emoji.png">`;
+      }
+      else {
+        htmlDisplay = `<img class="choice-result" src="../icons/scissors-emoji.png">`;
+      }
+      return htmlDisplay;
+    }
 
-        document.getElementById('display').innerHTML = displayScore();
-    </script>
+    function autoPlay() {
+      document.getElementById('auto-play-button').outerHTML = `
+        <button id="stop-play-button" onclick="stopPlay()">
+          Stop Play
+        </button>`;
+
+      autoPlayId = setInterval(function() {
+        const number = Math.random();
+        let randomChoice = '';
+        if (number < 1 / 3) { randomChoice = 'rock'; }
+        else if (number < 2 / 3) { randomChoice = 'paper'; }
+        else { randomChoice = 'scissors'; }
+
+        game(randomChoice);
+      }, 1000);
+    }
+
+    function stopPlay() {
+      clearInterval(autoPlayId);
+
+      document.getElementById('stop-play-button').outerHTML = `
+        <button id="auto-play-button" onclick="autoPlay()">
+          Auto Play
+        </button>`;
+    }
+
+    let score = JSON.parse(localStorage.getItem('score'))
+      || {
+      wins: 0,
+      losses: 0,
+      ties: 0
+    };
+
+    document.getElementById('display').innerHTML = displayScore();
+  </script>
 </body>
+
 </html>
